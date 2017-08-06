@@ -4,7 +4,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 
 	emails=email_to
 
-	try:
+	try:	
 		mail=smtplib.SMTP('smtp.gmail.com',587)
 
 		mail.ehlo()
@@ -12,9 +12,9 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 		mail.ehlo()
 
 	except Exception as e:
-		import Sender_show
+		import error_handeller
 		this_is_exceptiion_indicator=1
-		Sender_show.internet_problem()
+		error_handeller.internet_error()
 		print(1)
 
 	if this_is_exceptiion_indicator==0:
@@ -41,9 +41,9 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 					mail.sendmail(my_email,i,message)	
 
 		except Exception as e:
-			import Sender_show
+			import error_handeller
 			this_is_exceptiion_indicator=3		
-			Sender_show.file_problem_or_unknown_problem()
+			error_handeller.file_problem_or_unknown_problem()
 			print(3)
 		mail.close()
 
