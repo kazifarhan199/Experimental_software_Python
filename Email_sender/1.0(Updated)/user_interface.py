@@ -27,7 +27,10 @@ def main_sender():
 		subject,
 		message_body
 		)
-	sender_email_entry.grid(row=1,column=1)
+	try:
+		sender_email_entry.grid(row=1,column=1)
+	except:
+		pass
 
 def file_taker():
 	global name

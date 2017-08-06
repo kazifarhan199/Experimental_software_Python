@@ -25,7 +25,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 		except Exception as e:
 			import error_handeller
 			this_is_exceptiion_indicator=2
-			error_handler.login_error()
+			error_handeller.login_error()
 			
 
 	if this_is_exceptiion_indicator==0:

@@ -11,7 +11,11 @@ def internet_error():
 def login_error():
 	master=Tk()
 	login_error_label=Label(master,bg='red',
-		text="Check you'r e-mail or passward")
+		text="Check you'r e-mail or passward.")
+	login_error_label.config(font=("",20))
+	login_error_label.pack()
+	login_error_label=Label(master,bg='red',
+		text="Or may be option for allowing less secure apps is Disabled, Enable it to use email sender")
 	login_error_label.config(font=("",20))
 	login_error_label.pack()
 	master.mainloop()
