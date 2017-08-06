@@ -15,7 +15,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 		import error_handeller
 		this_is_exceptiion_indicator=1
 		error_handeller.internet_error()
-		print(1)
+		
 
 	if this_is_exceptiion_indicator==0:
 		try:
@@ -26,7 +26,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 			import error_handeller
 			this_is_exceptiion_indicator=2
 			error_handler.login_error()
-			print(2)
+			
 
 	if this_is_exceptiion_indicator==0:
 		try:
@@ -44,7 +44,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 			import error_handeller
 			this_is_exceptiion_indicator=3		
 			error_handeller.file_problem_or_unknown_problem()
-			print(3)
+			
 		mail.close()
 
 if __name__ == '__main__':
