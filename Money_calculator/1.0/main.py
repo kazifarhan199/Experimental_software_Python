@@ -101,7 +101,7 @@ class window1(Frame):
 			di=ttk.Label(text=''+amount[-i-1],width=20).grid(row=x,column=y+6)
 			x+=1
 	
-		for i in range(30):
+		for i in range(35):
 			Label(text='|',width=1).grid(row=i,column=y+1)
 			Label(text='-',width=1).grid(row=i,column=y+3)
 			Label(text='|',width=1).grid(row=i,column=y+5)
