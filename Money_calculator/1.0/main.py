@@ -19,7 +19,7 @@ class window1(Frame):
 
 		self.root.bind('<Control-w>',self.Quit)
 		self.root.bind('<Control-n>',self.Add_transation)
-		self.root.iconbitmap('bank_building.ico')
+		#self.root.iconbitmap('bank_building.ico')
 		self.menu_window1()
 		self.page_window1()
 
@@ -62,7 +62,7 @@ class window1(Frame):
 		e_transition=ttk.Entry(master)
 		e_transition.grid(row=1,column=1)
 		ttk.Button(master,width=20,text='Set New Transition',command=lambda:self.transition_button(e_name,e_transition,master)).grid(row=2,column=1)
-		master.iconbitmap('bank_building.ico')
+		#master.iconbitmap('bank_building.ico')
 
 	def transition_button(self,e_name,e_transition,master):
 		global new_name
@@ -81,7 +81,7 @@ class window1(Frame):
 			Label(error,font=(None,14),
 				text="Transition ammount need's to be an integer"
 				).pack()
-			error.iconbitmap('bank_building.ico')
+			#error.iconbitmap('bank_building.ico')
 			error.mainloop()
 
 	def page_window1(self):
@@ -101,7 +101,7 @@ class window1(Frame):
 			di=ttk.Label(text=''+amount[-i-1],width=20).grid(row=x,column=y+6)
 			x+=1
 	
-		for i in range(35):
+		for i in range(40):
 			Label(text='|',width=1).grid(row=i,column=y+1)
 			Label(text='-',width=1).grid(row=i,column=y+3)
 			Label(text='|',width=1).grid(row=i,column=y+5)
