@@ -8,12 +8,13 @@ name=[]
 transition=[]
 amount=[]
 new_name=''
-new_transition=''
+new_transition=0
 
 class window1(Frame):
 	def __init__(self,root=None):
 		Frame.__init__(self,root)
 		self.root=root
+		self.root.resizable(False,True)
 		self.root.geometry('600x400')
 
 		self.root.bind('<Control-w>',self.Quit)
@@ -53,7 +54,7 @@ class window1(Frame):
 	
 	def takeinput(self):
 		master=Tk()
-		master.iconbitmap('F:\\Project Not\\paper.ico')
+		master.resizable(False,False)
 		ttk.Label(master,text='Transition type').grid(row=0,column=0)
 		ttk.Label(master,text='Amount').grid(row=1,column=0)
 		e_name=ttk.Entry(master)
@@ -61,6 +62,7 @@ class window1(Frame):
 		e_transition=ttk.Entry(master)
 		e_transition.grid(row=1,column=1)
 		ttk.Button(master,width=20,text='Set New Transition',command=lambda:self.transition_button(e_name,e_transition,master)).grid(row=2,column=1)
+		master.iconbitmap('bank_building.ico')
 
 	def transition_button(self,e_name,e_transition,master):
 		global new_name
@@ -69,9 +71,18 @@ class window1(Frame):
 		new_name=e_name.get()
 		new_transition=e_transition.get()
 		name.append(e_name)
-		transition.append(e_transition)
-		self.new_transition_fill()
-		master.destroy()
+		try:
+			transition.append(e_transition)
+			self.new_transition_fill()
+			master.destroy()
+		except:
+			error=Tk()
+			error.resizable(False,False)
+			Label(error,font=(None,14),
+				text="Transition ammount need's to be an integer"
+				).pack()
+			error.iconbitmap('bank_building.ico')
+			error.mainloop()
 
 	def page_window1(self):
 		self.get_previous_saved_file()
@@ -84,10 +95,10 @@ class window1(Frame):
 		global amount
 		
 		for i in range(len(date)):
-			ai=ttk.Label(text='             '+date[-i-1],width=20).grid(row=x,column=y)
+			ai=ttk.Label(text=''+date[-i-1],width=20).grid(row=x,column=y)
 			bi=ttk.Label(text=name[-i-1],width=20).grid(row=x,column=y+2)
 			ci=ttk.Label(text=transition[-i-1],width=20).grid(row=x,column=y+4)
-			di=ttk.Label(text='	'+amount[-i-1],width=20).grid(row=x,column=y+6)
+			di=ttk.Label(text=''+amount[-i-1],width=20).grid(row=x,column=y+6)
 			x+=1
 	
 		for i in range(30):
