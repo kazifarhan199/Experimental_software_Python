@@ -120,5 +120,5 @@ file_button.grid(row=6,column=0)
 
 root.bind('Control-w',Quit)
 root.iconbitmap('email.ico')
-
+root.resizable(False,False)
 root.mainloop()
