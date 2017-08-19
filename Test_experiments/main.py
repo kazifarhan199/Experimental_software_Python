@@ -1,158 +1,179 @@
 from tkinter import *
-import csv
-from tkinter import ttk
-import datetime
+import data_manager
 from functools import partial
+from datetime import date
 
-date=[]
-name=[]
-transition=[]
-amount=[]
-new_name=''
-new_transition=0
+dates_labels=[]
+names_labels=[]
+amount_labels=[]
+balance_labels=[]
+edit_buttons=[]
+show_balance_label=[]
+deleat_buttons=[]
+event=0
 
-class window1(Frame):
-	def __init__(self,root=None):
-		Frame.__init__(self,root)
-		self.root=root
-		#self.root.resizable(False,True)
-		#self.root.geometry('600x400')
+date_of_transition, name_of_transition, amount_of_transition, amount_of_balance = data_manager.csv_reader()
 
-		self.root.bind('<Control-w>',self.Quit)
-		self.root.bind('<Control-n>',self.Add_transation)
-		#self.root.iconbitmap('bank_building.ico')
-		self.menu_window1()
-		self.page_window1()
-
-	def menu_window1(self):
-		menu=Menu(self.root)
-		self.root.config(menu=menu)
-
-		file=Menu(menu,tearoff=False)
-		file.add_command(label='New Transation',command=self.Add_transation)
-		file.add_separator()
-		file.add_command(label='quit',command=lambda:exit())
-		menu.add_cascade(label='File',menu=file)
-
-
-	def Add_transation(self,event=True):
-		self.takeinput()
-
-	def new_transition_fill(self):
-
-		global new_name,new_transition
-		todays_date=datetime.date.today()
-		try:
-			New_amount=int(amount[-1])+int(new_transition)
-		except:
-			New_amount=int(new_transition)
-
-		a=open('b.csv','a')
-		a.write('\n'+str(todays_date)+'|'+(new_name.upper())+'|'+new_transition+'|'+str(New_amount))
-		a.close()
-		self.get_previous_saved_file()
-		self.show(1,0)
-	
-	def takeinput(self):
-		master=Tk()
-		master.resizable(False,False)
-		ttk.Label(master,text='Transition type').grid(row=0,column=0)
-		ttk.Label(master,text='Amount').grid(row=1,column=0)
-		e_name=ttk.Entry(master)
-		e_name.grid(row=0,column=1)
-		e_transition=ttk.Entry(master)
-		e_transition.grid(row=1,column=1)
-		ttk.Button(master,width=20,text='Set New Transition',command=lambda:self.transition_button(e_name,e_transition,master)).grid(row=2,column=1)
-		#master.iconbitmap('bank_building.ico')
-
-	def transition_button(self,e_name,e_transition,master):
-		global new_name
-		global new_transition
-
-		new_name=e_name.get()
-		new_transition=e_transition.get()
-		name.append(e_name)
-		try:
-			transition.append(e_transition)
-			self.new_transition_fill()
-			master.destroy()
-		except:
-			error=Tk()
-			error.resizable(False,False)
-			Label(error,font=(None,14),
-				text="Transition ammount need's to be an integer"
-				).pack()
-			#error.iconbitmap('bank_building.ico')
-			error.mainloop()
-
-	def page_window1(self):
-		self.get_previous_saved_file()
-		Label(text="------------Date-------------------Transition name------------Transition Ammount----------------Balance---------").grid(row=0,column=0,columnspan=7)
-		self.show(1,0)
-
-	def Editor(self,no):
-		print(no)
-
-
-	def show(self,x,y):
-		global date
-		global name
-		global amount
+def display_data():
+	global date_of_transition, name_of_transition, amount_of_transition, amount_of_balance 
+	for i in range(len(date_of_transition)):
 		
-		edits=[]
+		dates_labels.append(Label(frame1,text=date_of_transition[i]))
+		dates_labels[i].grid(row=i+2,column=0)
+
+		names_labels.append(Label(frame1,text=name_of_transition[i]))
+		names_labels[i].grid(row=i+2,column=1)
+
+		amount_labels.append(Label(frame1,text=amount_of_transition[i]))
+		amount_labels[i].grid(row=i+2,column=2)
+
+		balance_labels.append(Label(frame1,text=amount_of_balance[i]))
+		balance_labels[i].grid(row=i+2,column=3)
+
+		edit_buttons.append(Button(frame1,text='EDIT',command=partial(edit,i,date_of_transition, name_of_transition, amount_of_transition)))
+		edit_buttons[i].grid(row=i+2,column=4)
+
+	show_balance_label.append(Label(frame2, fg='green',font=(None,17)))
+	show_balance_label[0].grid(row=1,column=2)
+	try:
+		show_balance_label[0].configure(text=amount_of_balance[-1])
+	except:
+		pass
 
 
-		for i in range(len(date)):
-			ai=ttk.Label(text=''+date[-i-1],width=20).grid(row=x,column=y)
-			bi=ttk.Label(text=name[-i-1],width=20).grid(row=x,column=y+2)
-			ci=ttk.Label(text=transition[-i-1],width=20).grid(row=x,column=y+4)
-			di=ttk.Label(text=''+amount[-i-1],width=20).grid(row=x,column=y+6)
-			edits.append(Button(text="Edit",command=partial(self.Editor,i)))			
-			edits[-1].grid(row=x,column=y+7)
-			x+=1
-			print()
+def edit(i,date_of_transition, name_of_transition, amount_of_transition):
+	global event
+
+	if event==0:
+		edit_date_containor=Entry(frame1,width=9)
+		edit_name_containor=Entry(frame1,width=10)
+		edit_amount_containor=Entry(frame1,width=7)
+		#edit_balance_containor=Entry(frame1,width=10)	
+
+		edit_date_containor.grid(row=i+2,column=0)
+		edit_name_containor.grid(row=i+2,column=1)
+		edit_amount_containor.grid(row=i+2,column=2)
+		#edit_balance_containor.grid(row=i+2,column=3)
+
+		edit_date_containor.insert(0,date_of_transition[i])
+		edit_name_containor.insert(0,name_of_transition[i])
+		edit_amount_containor.insert(0,amount_of_transition[i])
+		#edit_balance_containor.insert(0,amount_of_balance[i])
 	
-		for i in range(40):
-			Label(text='|',width=1).grid(row=i,column=y+1)
-			Label(text='-',width=1).grid(row=i,column=y+3)
-			Label(text='|',width=1).grid(row=i,column=y+5)
+		edit_buttons[i].configure(text='SAVE',command=lambda:save(i,edit_date_containor,edit_name_containor,edit_amount_containor,date_of_transition, name_of_transition, amount_of_transition))
+		event=1		
+	else:
+		print('First Save the file U are editting')
 
-	def Deleat(self,a,b,c,d,e):
-		a.destroy()
-		b.destroy()
-		c.destroy()
-		d.destroy()
-		e.destroy()
+def save(i,get_date,get_name,get_amount,edit_date_containor,edit_name_containor,edit_amount_containor):
+		global event, amount_of_balance
+		
+		edit_date_containor[i]=get_date.get()
+		edit_name_containor[i]=get_name.get()
+		edit_amount_containor[i]=get_amount.get()
 
-	def get_previous_saved_file(self):
-		global date
-		global name
-		global transition
-		global amount
+		new_dates,new_names,new_ammount,new_balances =  data_manager.csv_write(edit_date_containor,edit_name_containor,edit_amount_containor)
 
-		with open('b.csv') as csvfile:
-			readCSV  = csv.reader(csvfile, delimiter='|')
-			date=[]
-			name=[]
-			transition=[]
-			amount=[]
+		dates_labels[i].configure(text=new_dates[i])
+		names_labels[i].configure(text=new_names[i])
+		amount_labels[i].configure(text=new_ammount[i])
 
-			for i in readCSV:
+		edit_buttons[i].configure(text="EDIT",command=partial(edit,i,new_dates,new_names,new_ammount))
 
-				dates = i[0]
-				names = i[1]
-				transitions=i[2]
-				amounts = i[3]
+		for r in range(len(new_dates)):
+			balance_labels[r].configure(text=new_balances[r])
 
-				date.append(dates)
-				name.append(names)
-				transition.append(transitions)
-				amount.append(amounts)
+		get_date.destroy()
+		get_name.destroy()
+		get_amount.destroy()
 
-	def Quit(self,root=None):
-		self.root.destroy()
+		show_balance_label[0].configure(text=new_balances[-1])
+		
+		event=0
+
+def add_transition():
+	master=Tk()
+	Label(master,text='Enter Transition name : ').grid(row=0,column=0)
+	Label(master,text='Enter Transition amount : ').grid(row=1,column=0)
+	new_name_to_add=Entry(master)
+	new_amount_to_add=Entry(master)
+	new_name_to_add.grid(row=0,column=1)
+	new_amount_to_add.grid(row=1,column=1)
+	Button(master,text='Add',command=lambda:add_transition_main(new_name_to_add.get(),new_amount_to_add.get(),master),width=20).grid(row=2,column=1)
+	master.mainloop()
+
+def add_transition_main(name,amount,master):
+	global date_of_transition, name_of_transition, amount_of_transition, amount_of_balance
+	global dates_labels,names_labels,amount_labels,balance_labels,edit_buttons,show_balance_label
+
+	date_of_transition, name_of_transition, amount_of_transition, amount_of_balance = data_manager.csv_append(date.today(),name,amount)
+	for i in range(len(dates_labels)):
+		del dates_labels[0]
+		del	names_labels[0]
+		del	amount_labels[0]
+		del	balance_labels[0]
+		del	edit_buttons[0]
+
+	del	show_balance_label[0]
+
+	display_data()
+	master.destroy()
+
+def deleater():
+	global date_of_transition
+	Label(frame3,text='Deleat').grid(row=0,column=0)
+	Label(frame3,text='___________').grid(row=1,column=0)
+	for i in range(len(date_of_transition)):
+		deleat_buttons.append(Button(frame3,text='D',bg='black',fg='red',command=partial(terminate,i)))
+		deleat_buttons[i].grid(row=i+2,column=0)
+
+def terminate(i):
+	global date_of_transition, name_of_transition, amount_of_transition, amount_of_balance
+	global dates_labels,names_labels,amount_labels,balance_labels,edit_buttons
+	print(amount_of_transition)
+
+	del date_of_transition[i] 
+	del name_of_transition[i] 
+	del amount_of_transition[i] 
+	del amount_of_balance[i]	
+
+	print(amount_of_transition)
+
+	date_of_transition, name_of_transition, amount_of_transition, amount_of_balance = data_manager.csv_write(date_of_transition,name_of_transition,amount_of_transition)
+
+	print(amount_of_transition)	
+
+	dates_labels[i].destroy()
+	names_labels[i].destroy()
+	amount_labels[i].destroy()
+	balance_labels[i].destroy()
+	edit_buttons[i].destroy()
+	deleat_buttons[i].destroy()
+
+	show_balance_label[0].configure(text=amount_of_balance[-1])
 
 root=Tk()
-window1(root)
+root.resizable(False,False)	
+frame1 = Frame()
+frame1.grid(row=0,column=0)
+
+
+Label(frame1,text='------------Date-------------Transitin Type---------------Transition Ammount-----------Balance-----------EDIT---------------').grid(row=0,column=0,columnspan=5)
+Label(frame1,text='____________________________________________________________________________________________________________________________________________').grid(row=1,column=0,columnspan=5)
+
+frame2 = Frame()
+frame2.grid(row=1,column=0,columnspan=2)
+
+frame3 = Frame()
+frame3.grid(row=0,column=1)
+
+display_data()
+
+Label(frame2,text="______________________________________________________________________________________________________________________________________________").grid(row=0,column=0,columnspan=3)
+Add_transition_button=Button(frame2,text='ADD TRANSITION',font=(None,13),bg='blue',command=lambda:add_transition())
+Add_transition_button.grid(row=1,column=0)
+
+deleater()
+
+root.bind('<Control-w>',exit)
 root.mainloop()
-	
