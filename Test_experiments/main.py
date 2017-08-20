@@ -46,9 +46,19 @@ def display_data():
 	except:
 		pass
 
-
+error_avoit_local=[]
 def edit(i,date_of_transition, name_of_transition, amount_of_transition):
 	global event
+	global error_avoit_local
+	for a in range(len(error_defender)):
+		print('loop')
+		print(a)
+		print(error_defender[a])
+		if a < error_defender[a]:
+			i-=1
+			error_avoit_local.append(a)
+			print('done')
+
 
 	if event==0:
 		edit_date_containor=Entry(frame1,width=9)
@@ -56,17 +66,22 @@ def edit(i,date_of_transition, name_of_transition, amount_of_transition):
 		edit_amount_containor=Entry(frame1,width=7)
 		#edit_balance_containor=Entry(frame1,width=10)	
 
-		edit_date_containor.grid(row=i+2,column=0)
-		edit_name_containor.grid(row=i+2,column=1)
-		edit_amount_containor.grid(row=i+2,column=2)
+		edit_date_containor.grid(row=i+2-len(error_avoit_local),column=0)
+		edit_name_containor.grid(row=i+2-len(error_avoit_local),column=1)
+		edit_amount_containor.grid(row=i+2-len(error_avoit_local),column=2)
 		#edit_balance_containor.grid(row=i+2,column=3)
+		
+		print(error_defender)
 
+
+		print(i)
 		edit_date_containor.insert(0,date_of_transition[i])
 		edit_name_containor.insert(0,name_of_transition[i])
 		edit_amount_containor.insert(0,amount_of_transition[i])
 		#edit_balance_containor.insert(0,amount_of_balance[i])
-	
+
 		edit_buttons[i].configure(text='SAVE',command=lambda:save(i,edit_date_containor,edit_name_containor,edit_amount_containor,date_of_transition, name_of_transition, amount_of_transition))
+
 		event=1		
 	else:
 		edit_manager.append(Frame(bg='snow'))
@@ -76,7 +91,8 @@ def edit(i,date_of_transition, name_of_transition, amount_of_transition):
 		
 def save(i,get_date,get_name,get_amount,edit_date_containor,edit_name_containor,edit_amount_containor):
 		global event, amount_of_balance
-		global edit_manager
+		global edit_manager, error_avoit_local
+
 		try:
 			edit_manager[0].destroy()
 			edit_manager[1].destroy()
@@ -97,7 +113,7 @@ def save(i,get_date,get_name,get_amount,edit_date_containor,edit_name_containor,
 		edit_buttons[i].configure(text="EDIT",command=partial(edit,i,new_dates,new_names,new_ammount))
 
 		for r in range(len(new_dates)):
-			balance_labels[r].configure(text=new_balances[r])
+			balance_labels[r].configure(text=new_balances[r-len(error_avoit_local)])
 
 		get_date.destroy()
 		get_name.destroy()
@@ -106,6 +122,9 @@ def save(i,get_date,get_name,get_amount,edit_date_containor,edit_name_containor,
 		show_balance_label[0].configure(text=new_balances[-1])
 		
 		event=0
+
+		for u in range(len(error_avoit_local)-1):
+			del error_avoit_local[u]
 
 def add_transition():
 	master=Tk()
@@ -181,7 +200,7 @@ root.resizable(False,False)
 frame1 = Frame(bg='snow')
 frame1.grid(row=0,column=0)
 
-																														   		  
+																														   		
 Label(frame1,bg='snow',text='------------Date-------------Transitin Type---------------Transition Ammount----------------Balance                           EDIT           ').grid(row=0,column=0,columnspan=5)
 Label(frame1,bg='snow',text='____________________________________________________________________________________________________________________________________________').grid(row=1,column=0,columnspan=5)
 
