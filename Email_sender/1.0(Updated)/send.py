@@ -4,17 +4,17 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 
 	emails=email_to
 
-	try:	
-		mail=smtplib.SMTP('smtp.gmail.com',587)
+	#try:	
+	mail=smtplib.SMTP('smtp.gmail.com',586)
 
-		mail.ehlo()
-		mail.starttls()
-		mail.ehlo()
+	mail.ehlo()
+	mail.starttls()
+	mail.ehlo()
 
-	except Exception as e:
-		import error_handeller
-		this_is_exceptiion_indicator=1
-		error_handeller.internet_error()
+#	except Exception as e:
+#		import error_handeller
+#		this_is_exceptiion_indicator=1
+#		error_handeller.internet_error()
 		
 
 	if this_is_exceptiion_indicator==0:
@@ -48,5 +48,5 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 		mail.close()
 
 if __name__ == '__main__':
-	main('youremailadress','passward','to_Whome_his_email',
+	main('kazifarhan199@gmail.com','Firefox10@','farhankazi43@gmail.com',
 		'Subject','Message')

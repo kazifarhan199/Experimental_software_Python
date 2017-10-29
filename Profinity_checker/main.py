@@ -22,7 +22,7 @@ def file_importer():
 	
 def search_engion(key_word_holder):
 	headers={}
-	key_word_holder=re.sub(r"\s+", '+', key_word_holder)
+	key_word_holder=re.sub(r"\s", '', key_word_holder)
 	headers['User-Agent'] =  'Mozilla/5.0 (X11; Linux i686) AppleWebKit/537.17 (KHTML, like Gecko) Chrome/24.0.1312.27 Safari/537.17'
 	resp=urllib.request.Request("http://www.wdylike.appspot.com/?q="+key_word_holder,headers=headers)
 	apple=urllib.request.urlopen(resp)

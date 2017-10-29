@@ -2,10 +2,11 @@ import tkinter as tk
 import webbrowser
 
 
+
 def open_link(text_provided):
 	chrome_path="C:\\Program Files (x86)\\Google\Chrome\\Application\\chrome.exe"
-	webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),1)
-	
+	webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),0)
+
 	main_lib={
 	'cleaverprogrammer':'http://cleverprogrammer.teachable.com'
 	,'shopify':'https://www.shopify.com/login'
@@ -14,9 +15,9 @@ def open_link(text_provided):
 	,'programmersstuff':'programmersstuff.com'
 	,'zoho':'https://mail.zoho.com/zm/#mail/folder/inbox'
 	,'godaddy':'godaddy.com'
-	,'githun':'https://github.com/KaziFarhan'
+	,'githun':'https://github.com'
 	}
-	
+
 	webbrowser.get('chrome').open_new(main_lib[text_provided])
 
 #####################################################################

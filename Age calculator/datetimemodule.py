@@ -22,7 +22,7 @@ def close(event):
 
 root=tk.Tk()
 root.title('Age')
-root.iconbitmap('C:\\Users\\kazif\\Downloads\\paper.ico')
+#root.iconbitmap('paper.ico')
 #could add above line after coping and makng a .ico file and providing path above
 
 root.bind('<Control-w>',close)    #for shoetcut window close
