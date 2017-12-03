@@ -3,7 +3,7 @@ from kivy.uix.widget import Widget
 from kivy.core.window import Window
 from kivy.clock import Clock
 from kivy.uix.image import Image
-from kivy.uix.label import Label 
+from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.modalview import ModalView
 from kivy.uix.gridlayout import GridLayout
@@ -34,7 +34,7 @@ class cheese(Image):#100x100
 	def __inti__(self,**kwargs):
 		super(cheese,self).__init__(self)
 		self.size=(chees_size,chees_size)
-	
+
 	def update(self):
 		self.x+=2
 
@@ -51,7 +51,7 @@ class cheese(Image):#100x100
 		else:
 			rat_speed_x-=incr
 
-		if rat_speed_y > 0: 	
+		if rat_speed_y > 0:
 			rat_speed_y+=incr
 		else:
 			rat_speed_y-=incr
@@ -78,7 +78,7 @@ class rat(Image):#150x150
 
 		elif keycode == (274, 'down'):
 			counter_y=1
-			rat_speed_y=-abs(rat_speed_y)			
+			rat_speed_y=-abs(rat_speed_y)
 
 		if keycode == (275, 'right'):
 			counter_x=1
@@ -86,7 +86,7 @@ class rat(Image):#150x150
 
 		elif keycode == (276, 'left'):
 			counter_x=1
-			rat_speed_x=-abs(rat_speed_x)			
+			rat_speed_x=-abs(rat_speed_x)
 
 	def update(self):
 		global score
@@ -102,7 +102,7 @@ class rat(Image):#150x150
 
 			score_page=ModalView(auto_dismiss=False)
 			score_page.add_widget(Label(text='Game over with Score >> [color=#96ff00]'+str(score)+'[/color]',markup=True,font_size=22))
-			score_page.open()			
+			score_page.open()
 			counter_x=0
 			counter_y=0
 

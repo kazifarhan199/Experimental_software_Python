@@ -1,0 +1,5 @@
+a = int(input("Enter a number : " ))
+print("The number in binary is :",bin(a)[2:])
+print("The number in octa is :",oct(a)[2:])
+print("The number in hexa is :",hex(a)[2:] )
+input()

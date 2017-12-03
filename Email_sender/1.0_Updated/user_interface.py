@@ -48,7 +48,7 @@ def mass_mode(a=0):
 	to_list_label.grid(row=3,column=0,columnspan=2)
 	file_button.config(text='File',bg='blue',command=file_taker)
 	if a!=0:
-		to_list_label.configure(text=a)				
+		to_list_label.configure(text=a)
 
 def single_mode():
 	global send_mode

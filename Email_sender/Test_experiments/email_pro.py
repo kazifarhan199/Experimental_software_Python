@@ -45,7 +45,7 @@ class user_interface(GridLayout):
 			self.send_to.text,
 			self.subject.text,
 			self.message.text
-			)	
+			)
 
 	def quit(self,GridLayout):
 		load = ObjectProperty(None)

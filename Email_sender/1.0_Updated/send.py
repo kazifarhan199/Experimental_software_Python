@@ -1,21 +1,21 @@
 def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 	import smtplib
-	this_is_exceptiion_indicator=0	
+	this_is_exceptiion_indicator=0
 
 	emails=email_to
 
-	#try:	
-	mail=smtplib.SMTP('smtp.gmail.com',586)
+	try:
+		mail=smtplib.SMTP('smtp.gmail.com',587)
 
-	mail.ehlo()
-	mail.starttls()
-	mail.ehlo()
+		mail.ehlo()
+		mail.starttls()
+		mail.ehlo()
 
-#	except Exception as e:
-#		import error_handeller
-#		this_is_exceptiion_indicator=1
-#		error_handeller.internet_error()
-		
+	except Exception as e:
+		import error_handeller
+		this_is_exceptiion_indicator=1
+		error_handeller.internet_error()
+
 
 	if this_is_exceptiion_indicator==0:
 		try:
@@ -26,7 +26,7 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 			import error_handeller
 			this_is_exceptiion_indicator=2
 			error_handeller.login_error()
-			
+
 
 	if this_is_exceptiion_indicator==0:
 		try:
@@ -35,16 +35,16 @@ def main(from_the_person,passward,email_to,subject_of_mail,Email_message):
 			message = 'Subject: {}\n\n{}'.format(subjec, text)
 			if type(emails)==str:
 				mail.sendmail(my_email,emails,message)
-				
+
 			elif type(emails)==list:
 				for i in emails:
-					mail.sendmail(my_email,i,message)	
+					mail.sendmail(my_email,i,message)
 
 		except Exception as e:
 			import error_handeller
-			this_is_exceptiion_indicator=3		
+			this_is_exceptiion_indicator=3
 			error_handeller.file_problem_or_unknown_problem()
-			
+
 		mail.close()
 
 if __name__ == '__main__':
