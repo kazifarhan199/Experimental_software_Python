@@ -1,0 +1,10 @@
+Controls:
+up,Down,Right,Left
+
+Right Swaard 'c'
+Left Swaard 'x'
+
+
+#################################################################
+All art peases and music belongs to there respective oners.
+This is purly for Educational purpose only.
