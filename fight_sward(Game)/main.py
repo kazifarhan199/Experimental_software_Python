@@ -81,9 +81,10 @@ class Fighter(Image):
         elif keycode == (276, 'left'):
             if (self.x >= 10 ):
                 self.x += -30
+            global cter,chimg
             if (cter==0):
                 if(chimg==True):
-                    self.image = 'aaa.png'
+                    self.source = 'aaa.png'
                 cter=1
             else:
                 if(chimg==True):
