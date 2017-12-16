@@ -377,11 +377,14 @@ class Games(Widget):
         self.coindb.updateb()
 
     def restart(self,*ignore):
+        global jumper,e_jump
         global chimg,oner,pla_hi,eni_hi
         self.fighter.source='aaa.png'
         self.enime.source='en_1.png'
         chimg = True
         oner = True
+        jumper=False
+        e_jump=False
         self.fighter.helth=500
         self.enime.helth=500
         self.fighter.x=0
