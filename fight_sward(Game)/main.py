@@ -1,3 +1,4 @@
+import os
 from kivy.uix.button import Button
 from kivy.core.audio import SoundLoader
 from kivy.app import App
@@ -7,13 +8,16 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock
 import random
-
+import kivy.deps.gstreamer
+os.environ['KIVY_IMAGE'] = 'pil,sdl2'
 ##########
+mute = True
 oner = False
-chimg=False
 #########
+src_daag="daag.png"
+
 e_jump=False
-cter =0
+cter=0
 w_width = 1366
 w_height = 768
 player_width = 229
@@ -27,6 +31,8 @@ coins=0
 coinsb=0
 ecount=0
 action_en=10
+
+chimg = False
 
 class Back_ground(Image):
     def __init__(self,**kwargs):
@@ -54,7 +60,7 @@ class Fighter(Image):
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
 
     def _on_keyboard_down(self, keyboard, keycode, text, modifiers):
-        global jumper,coins,coinsb
+        global jumper,coins,coinsb,cter,chimg
 
         if keycode == (273, 'up'):
             if(self.y == 80 ):
@@ -67,7 +73,7 @@ class Fighter(Image):
         elif keycode == (275, 'right'):
             if(self.x<=w_width-250):
                 self.x += 30
-            global cter,chimg
+
             if (cter==0):
                 if(chimg==True):
                     self.source = 'aaa.png'
@@ -79,9 +85,9 @@ class Fighter(Image):
 
 
         elif keycode == (276, 'left'):
+
             if (self.x >= 10 ):
                 self.x += -30
-            global cter,chimg
             if (cter==0):
                 if(chimg==True):
                     self.source = 'aaa.png'
@@ -217,15 +223,15 @@ class Enime(Image):
 
         if((other.x+player_width-50) >= da2.x and (other.x) <= da2.x and (other.y+player_height) >= da2.y and (other.y) <= da2.y):
             other.helth-=50
-            pla_hi[-1].x=10000
+            pla_hi[-1].x=100000
             del pla_hi[-1]
-            da2.x=10000
+            da2.x=-100000
 
         if((other.x-50) <= da1.x and (other.x) >= da1.x and (other.y+player_height) >= da1.y and (other.y) <= da1.y):
             other.helth-=50
-            pla_hi[-1].x=10000
+            pla_hi[-1].x=100000
             del pla_hi[-1]
-            da1.x=-10000
+            da1.x=100000
 
         if ecount == 120 and other.x < self.x:
             da2.x=self.x
@@ -243,6 +249,7 @@ class Enime(Image):
             ecount=0
 
 class Sound_handler():
+    global mute
     D = SoundLoader.load('death.wav')
     W = SoundLoader.load('won.wav')
     J = SoundLoader.load('jump.ogg')
@@ -250,19 +257,26 @@ class Sound_handler():
     S = SoundLoader.load('str.ogg')
     M = SoundLoader.load('main.ogg')
     def deth():
-        Sound_handler.D.play()
+        if(mute==False):
+            Sound_handler.D.play()
     def win():
-        Sound_handler.W.play()
+        if(mute==False):
+            Sound_handler.W.play()
     def jum():
-        Sound_handler.J.play()
+        if(mute==False):
+            Sound_handler.J.play()
     def kick():
-        Sound_handler.C.play()
+        if(mute==False):
+            Sound_handler.C.play()
     def Str():
-        Sound_handler.S.play()
+        if(mute==False):
+            Sound_handler.S.play()
     def ma():
-        Sound_handler.M.play()
+        if(mute==False):
+            Sound_handler.M.play()
     def ma_c():
-        Sound_handler.M.stop()
+        if(mute==False):
+            Sound_handler.M.stop()
 
 
 class Games(Widget):
@@ -271,39 +285,43 @@ class Games(Widget):
 
         global oner,eni_hi,pla_hi
 
-
-        back = Back_ground(source='dada.jpg')
-        self.add_widget(back)
+        self.back = Back_ground(source='dada.jpg')
+        self.add_widget(self.back)
 
         self.fighter = Fighter(source='yayao.png',y=80)
 
         self.add_widget(self.fighter)
 
-        self.coind=coin(source='daag.png',x=10000)
+        self.coind=coin(source=src_daag,x=10000)
         self.add_widget(self.coind)
-        self.coindb=coin(source='daag.png',x=-10000)
+        self.coindb=coin(source=src_daag,x=-10000)
         self.add_widget(self.coindb)
 
-        self.coind2 = coin(source='daag.png', x=10000)
+        self.coind2 = coin(source=src_daag, x=10000)
         self.add_widget(self.coind2)
-        self.coindb2 = coin(source='daag.png', x=-10000)
+        self.coindb2 = coin(source=src_daag, x=-10000)
         self.add_widget(self.coindb2)
 
         self.enime=Enime(source='en_1.png',x=1100,y=80)
         self.add_widget(self.enime)
 
-        #self.add_widget(Label(text='Your health is : ',x=60,y=650,markup=True,font_size=32))
-        #self.add_widget(Label(text='His health is : ',x=1116,y=650,markup=True,font_size=32))
-
         self.player_h_l=Label(text=str(self.fighter.helth),x=190,y=650,markup=True,font_size=32)
         self.computer_h_l=Label(text=str(self.enime.helth),x=1246,y=650,markup=True,font_size=32)
 
-        #self.add_widget(self.player_h_l)
-        #self.add_widget(self.computer_h_l)
-
         self.starter=Button(text="START",x=w_width/2-400,background_color=(1,1,1,1),y=w_height/2,size=(800,200),font_size=200)
+
+        self.options=Button(text="Options",x=w_width/2-200,background_color=(0,1,1,1),y=w_height/2-200,size=(400,100),font_size=100)
+
+        self.exit_button = Button(text="Exit",size=(100,50),x=0,y=w_height-50,background_color=(1,0,0,1),font_size=30)
+        self.exit_button.bind(on_press=self.exiter)
+        self.add_widget(self.exit_button)
+
+
         self.add_widget(self.starter)
+        self.add_widget(self.options)
+
         self.starter.bind(on_press=self.start)
+        self.options.bind(on_press=self.option)
 
         for i in range (0,int(self.fighter.helth/50)):
             p=i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i
@@ -318,13 +336,139 @@ class Games(Widget):
 
         Clock.schedule_interval(self.updater,1/65)
 
+    def exiter(self,*ignore):
+        main().stop()
+
+
+    def option(self,*ignore):
+        self.remove_widget(self.starter)
+        self.remove_widget(self.options)
+        try:
+            self.remove_widget(self.ex_b)
+            self.remove_widget(self.lala)
+            self.remove_widget(self.bu)
+        except:
+            pass
+        self.opt_starter = Button(text="Back",x=0,y=0)
+        self.opt_starter.bind(on_press=self.opt_str)
+        self.add_widget(self.opt_starter)
+
+        self.opt_starter_sta = Button(text="Start",x=w_width-100,y=0)
+        self.opt_starter_sta.bind(on_press=self.start)
+        self.add_widget(self.opt_starter_sta)
+
+        self.label_wep = Label(text='Weapon ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=450)
+        self.add_widget(self.label_wep)
+
+        self.wep_image=Image(source=src_daag,x=800,y=500)
+        self.add_widget(self.wep_image)
+
+        self.wep_change=Button(text="Change",font_size=25,background_color=(1,0,1,1),size=(100,50),x=900,y=525)
+        self.wep_change.bind(on_press=self.change_wep)
+        self.add_widget(self.wep_change)
+
+        self.muter=Button(text='Muter',x=w_width-100,y=w_height-50,size=(100,50))
+        self.muter.bind(on_press=self.mut)
+        self.add_widget(self.muter)
+
+    def change_wep(self,*ignore):
+        global src_daag
+        if(src_daag=="daag.png"):
+            src_daag='daag1.png'
+            self.wep_image.source=src_daag
+            self.coind.source=src_daag
+            self.coindb2.source=src_daag
+            self.coind2.source=src_daag
+            self.coindb.source=src_daag
+
+        elif(src_daag=='daag1.png'):
+            src_daag="daag.png"
+            self.wep_image.source=src_daag
+            self.coind.source=src_daag
+            self.coindb2.source=src_daag
+            self.coind2.source=src_daag
+            self.coindb.source=src_daag
+
+    def opt_str(self,*ignore):
+        try:
+            self.add_widget(self.starter)
+        except:
+            pass
+        try:
+            self.add_widget(self.options)
+        except:
+            pass
+        try:
+            self.remove_widget(self.opt_starter)
+            self.remove_widget(self.opt_starter_sta)
+        except:
+            pass
+        try:
+            self.remove_widget(self.muter)
+        except:
+            pass
+        try:
+            self.remove_widget(self.unmuter)
+        except:
+            pass
+        try:
+            self.remove_widget(self.label_wep)
+        except:
+            pass
+        self.remove_widget(self.wep_image)
+        self.remove_widget(self.wep_change)
+
+    def mut(self,*ignore):
+        global mute
+        mute=True
+        self.remove_widget(self.muter)
+        self.unmuter=Button(text='Unmuter',x=w_width-100,y=w_height-50,size=(100,50))
+        self.unmuter.bind(on_press=self.unmut)
+        self.add_widget(self.unmuter)
+
+    def unmut(self,*ignore):
+        global mute
+        mute=False
+
+        self.remove_widget(self.unmuter)
+        self.muter.bind(on_press=self.mut)
+        self.add_widget(self.muter)
+
     def start(self,*ignore):
         global oner,chimg
         chimg = True
         oner = True
+        try:
+            self.remove_widget(self.opt_starter)
+            self.remove_widget(self.opt_starter_sta)
+            self.remove_widget(self.label_wep)
+            self.remove_widget(self.wep_image)
+            self.remove_widget(self.wep_change)
+        except:
+            pass
+        try:
+            self.restart()
+        except:
+            pass
         Sound_handler.Str()
         self.remove_widget(self.starter)
+        self.remove_widget(self.options)
+        self.remove_widget(self.starter)
+        self.remove_widget(self.exit_button)
+        try:
+            self.remove_widget(self.opt_starter_sta)
+            self.remove_widget(self.opt_starter)
+        except:
+            pass
+        try:
+            self.remove_widget(self.unmuter)
+        except:
+            pass
 
+        try:
+            self.remove_widget(self.muter)
+        except:
+            pass
 
     def updater(self,*ignore):
         if (oner == True):
@@ -336,23 +480,21 @@ class Games(Widget):
         self.fighter.update(self.enime,self.coind,self.coindb)
         self.enime.update(self.fighter,self.coind2,self.coindb2,self.coind,self.coindb)
 
-        #self.player_h_l.text = str(self.fighter.helth)
-        #self.computer_h_l.text = str(self.enime.helth)
-
         if (self.fighter.helth==0):
             oner = False
             self.enime.source = 'en_ya.png'
             self.lala =Label(text='[color=#000000]YOU LOSS',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
             Sound_handler.ma_c()
+            self.add_widget(self.options)
             Sound_handler.deth()
-
+            self.add_widget(self.exit_button)
             self.bu=Button(text="Restart",x=w_width/2-400,background_color=(1,0,0,1),y=w_height/2-30,size=(400,100),font_size=100)
             self.add_widget(self.bu)
             self.bu.bind(on_press=self.restart)
             self.ex_b=Button(text="Exit",x=w_width/2,background_color=(1,1,0,1),y=w_height/2-30,size=(400,100),font_size=100)
             self.add_widget(self.ex_b)
-            self.ex_b.bind(on_press=exit)
+            self.ex_b.bind(on_press=self.exiter)
 
         if(self.enime.helth==0):
             global chimg
@@ -361,6 +503,8 @@ class Games(Widget):
             chimg=False
             self.lala=Label(text='[color=#000000]YOU WONE',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
+            self.add_widget(self.exit_button)
+            self.add_widget(self.options)
             Sound_handler.ma_c()
             Sound_handler.win()
 
@@ -369,7 +513,7 @@ class Games(Widget):
             self.bu.bind(on_press=self.restart)
             self.ex_b=Button(text="Exit",x=w_width/2,background_color=(1,0,0,1),y=w_height/2-30,size=(400,100),font_size=100)
             self.add_widget(self.ex_b)
-            self.ex_b.bind(on_press=exit)
+            self.ex_b.bind(on_press=self.exiter)
 
         self.coind2.update()
         self.coindb2.updateb()
@@ -397,6 +541,9 @@ class Games(Widget):
         self.coindb.x=-10000
         self.coind2.x=10000
         self.coindb2.x=-10000
+
+        self.remove_widget(self.options)
+        self.remove_widget(self.exit_button)
 
         self.remove_widget(self.ex_b)
         self.remove_widget(self.lala)
@@ -430,6 +577,7 @@ class main(App):
     global w_width,w_height
     def build(self):
         r=Games()
+        Window.fullscreen = True
         Window.size = (w_width,w_height)
         return r
 
