@@ -392,7 +392,7 @@ class Games(Widget):
 
         self.label_py = Label(text='You ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=150)
         self.add_widget(self.label_py)
-
+        self.add_widget(self.exit_button)
         self.pymi=Image(source=h_i_1,x=800,y=150)
         self.add_widget(self.pymi)
 
@@ -402,6 +402,7 @@ class Games(Widget):
 
     def py_i_chang(self,*ignore):
         global h_i_1,h_i_2 ,py_count
+        print(py_count)
 
         if(py_count==0):
             h_i_1='sask.png'
@@ -409,6 +410,7 @@ class Games(Widget):
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=1
+            print(py_count)
 
         elif(py_count==1):
             h_i_1='aaa.png'
@@ -590,6 +592,7 @@ class Games(Widget):
             self.add_widget(self.lala)
             Sound_handler.ma_c()
             self.add_widget(self.options)
+            self.add_widget(self.exit_button)
             Sound_handler.deth()
             self.bu=Button(text="Restart",x=w_width/2-400,background_color=(1,0,0,1),y=w_height/2-30,size=(400,100),font_size=100)
             self.add_widget(self.bu)
