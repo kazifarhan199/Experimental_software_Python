@@ -7,7 +7,7 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock
 import random
-
+from kivy.deps import sdl2, glew
 ##########
 mute = False
 oner = False
@@ -353,6 +353,7 @@ class Games(Widget):
         self.remove_widget(self.starter)
         self.remove_widget(self.options)
         try:
+            self.remove_widget(self.exit_button)
             self.remove_widget(self.ex_b)
             self.remove_widget(self.lala)
             self.remove_widget(self.bu)
@@ -392,17 +393,16 @@ class Games(Widget):
 
         self.label_py = Label(text='You ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=150)
         self.add_widget(self.label_py)
-        self.add_widget(self.exit_button)
         self.pymi=Image(source=h_i_1,x=800,y=150)
         self.add_widget(self.pymi)
 
         self.py_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=175)
         self.py_chang.bind(on_press=self.py_i_chang)
         self.add_widget(self.py_chang)
+        self.add_widget(self.exit_button)
 
     def py_i_chang(self,*ignore):
         global h_i_1,h_i_2 ,py_count
-        print(py_count)
 
         if(py_count==0):
             h_i_1='sask.png'
@@ -410,14 +410,28 @@ class Games(Widget):
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=1
-            print(py_count)
 
         elif(py_count==1):
             h_i_1='aaa.png'
             h_i_2='yayao.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
+            py_count=2
+
+        elif(py_count==2):
+            h_i_1='rabo.png'
+            h_i_2='rabo2.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=3
+
+        elif(py_count==3):
+            h_i_1='en_1.png'
+            h_i_2='en_2.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
             py_count=0
+
 
     def kaka(self,*ignore):
         global eni_1,eni_2 ,eni_count
@@ -434,7 +448,22 @@ class Games(Widget):
             eni_2='en_2.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
+            eni_count=2
+
+        elif(eni_count==2):
+            eni_1='aaa.png'
+            eni_2='yayao.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=3
+
+        elif(eni_count==3):
+            eni_1='sask.png'
+            eni_2='sask2.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
             eni_count=0
+
 
     def change_wep(self,*ignore):
         global src_daag ,dag_count
