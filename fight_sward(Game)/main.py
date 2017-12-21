@@ -265,7 +265,7 @@ class Sound_handler():
     J = SoundLoader.load('jump.ogg')
     C = SoundLoader.load('kick.ogg')
     S = SoundLoader.load('str.ogg')
-    M = SoundLoader.load('main.ogg')
+    #M = SoundLoader.load('main.wav')
     def deth():
         if(mute==False):
             Sound_handler.D.play()
@@ -281,12 +281,12 @@ class Sound_handler():
     def Str():
         if(mute==False):
             Sound_handler.S.play()
-    def ma():
-        if(mute==False):
-            Sound_handler.M.play()
-    def ma_c():
-        if(mute==False):
-            Sound_handler.M.stop()
+    #def ma():
+    #    if(mute==False):
+    #        Sound_handler.M.play()
+    #def ma_c():
+    #    if(mute==False):
+    #        Sound_handler.M.stop()
 
 
 class Games(Widget):
@@ -295,7 +295,7 @@ class Games(Widget):
 
         global oner,eni_hi,pla_hi
 
-        self.back = Back_ground(source='dada.jpg')
+        self.back = Back_ground(source='dada.png')
         self.add_widget(self.back)
 
         self.fighter = Fighter(source=h_i_2,y=80)
@@ -353,7 +353,6 @@ class Games(Widget):
         self.remove_widget(self.starter)
         self.remove_widget(self.options)
         try:
-            self.remove_widget(self.exit_button)
             self.remove_widget(self.ex_b)
             self.remove_widget(self.lala)
             self.remove_widget(self.bu)
@@ -399,7 +398,10 @@ class Games(Widget):
         self.py_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=175)
         self.py_chang.bind(on_press=self.py_i_chang)
         self.add_widget(self.py_chang)
-        self.add_widget(self.exit_button)
+        try:
+            self.add_widget(self.exit_button)
+        except:
+            pass
 
     def py_i_chang(self,*ignore):
         global h_i_1,h_i_2 ,py_count
@@ -412,22 +414,22 @@ class Games(Widget):
             py_count=1
 
         elif(py_count==1):
-            h_i_1='aaa.png'
-            h_i_2='yayao.png'
+            h_i_1='rabo.png'
+            h_i_2='rabo2.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=2
 
         elif(py_count==2):
-            h_i_1='rabo.png'
-            h_i_2='rabo2.png'
+            h_i_1='en_1.png'
+            h_i_2='en_2.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=3
 
         elif(py_count==3):
-            h_i_1='en_1.png'
-            h_i_2='en_2.png'
+            h_i_1='aaa.png'
+            h_i_2='yayao.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=0
@@ -444,33 +446,32 @@ class Games(Widget):
             eni_count=1
 
         elif(eni_count==1):
-            eni_1='en_1.png'
-            eni_2='en_2.png'
+            eni_1='aaa.png'
+            eni_2='yayao.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=2
 
         elif(eni_count==2):
-            eni_1='aaa.png'
-            eni_2='yayao.png'
+            eni_1='sask.png'
+            eni_2='sask2.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=3
 
         elif(eni_count==3):
-            eni_1='sask.png'
-            eni_2='sask2.png'
+            eni_1='en_1.png'
+            eni_2='en_2.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=0
-
 
     def change_wep(self,*ignore):
         global src_daag ,dag_count
 
 
         if(dag_count==0):
-            src_daag='daag1.png'
+            src_daag='daag2.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -479,7 +480,7 @@ class Games(Widget):
             dag_count=1
 
         elif(dag_count==1):
-            src_daag='daag2.png'
+            src_daag='daag3.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -488,7 +489,7 @@ class Games(Widget):
             dag_count=2
 
         elif(dag_count==2):
-            src_daag='daag3.png'
+            src_daag='daag.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -497,7 +498,7 @@ class Games(Widget):
             dag_count=3
 
         elif(dag_count==3):
-            src_daag="daag.png"
+            src_daag="daag1.png"
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -609,7 +610,7 @@ class Games(Widget):
         elif(self.fighter.x>self.enime.x):
             side_no = 1
 
-        Sound_handler.ma()
+        #Sound_handler.ma()
         self.fighter.update(self.enime,self.coind,self.coindb)
         self.enime.update(self.fighter,self.coind2,self.coindb2,self.coind,self.coindb)
 
@@ -619,7 +620,7 @@ class Games(Widget):
             self.enime.source = 'en_ya.png'
             self.lala =Label(text='[color=#000000]YOU LOSS',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
-            Sound_handler.ma_c()
+            #Sound_handler.ma_c()
             self.add_widget(self.options)
             self.add_widget(self.exit_button)
             Sound_handler.deth()
@@ -638,7 +639,7 @@ class Games(Widget):
             self.lala=Label(text='[color=#000000]YOU WONE',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
             self.add_widget(self.options)
-            Sound_handler.ma_c()
+            #Sound_handler.ma_c()
             Sound_handler.win()
 
             self.bu=Button(text="Restart",x=w_width/2-400,background_color=(0,1,0,1),y=w_height/2-30,size=(400,100),font_size=100)
