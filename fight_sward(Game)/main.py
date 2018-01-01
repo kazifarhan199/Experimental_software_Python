@@ -7,7 +7,7 @@ from kivy.uix.image import Image
 from kivy.core.window import Window
 from kivy.clock import Clock
 import random
-from kivy.deps import sdl2, glew
+
 ##########
 mute = False
 oner = False
