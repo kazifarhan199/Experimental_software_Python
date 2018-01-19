@@ -1,0 +1,1 @@
+pip install --upgrade https://github.com/pyinstaller/pyinstaller/archive/develop.zip

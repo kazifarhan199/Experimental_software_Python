@@ -4,8 +4,6 @@ up,Down,Right,Left
 Right Swaard 'c'
 Left Swaard 'x'
 
-#######################################################################
-you can add custom photos as playes by replacing them by the names of given photis (Same can be done with audio files)
 
 #################################################################
 All art peases and music belongs to there respective oners.

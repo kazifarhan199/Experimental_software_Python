@@ -1,3 +1,7 @@
+#from kivy.config import Config
+#Config.set('graphics', 'fullscreen', 1)
+# I am not using this just because it is a game and the loading
+#  looks better with Window.size for now
 from kivy.uix.button import Button
 from kivy.core.audio import SoundLoader
 from kivy.app import App
@@ -11,17 +15,21 @@ import random
 ##########
 mute = False
 oner = False
+ft=0
 #########
-eni_1 = 'en_1.png'
-eni_2 = 'en_2.png'
+eni_1 = 'images/en_1.png'
+eni_2 = 'images/en_2.png'
 eni_count=0
 ######
-h_i_1 = 'aaa.png'
-h_i_2 = 'yayao.png'
+h_i_1 = 'images/aaa.png'
+h_i_2 = 'images/yayao.png'
 py_count=0
 #####
-hea_png='health.png'
-src_daag="daag1.png"
+back_src ='images/dada3.png'
+back_count = 0
+###
+hea_png='images/health.png'
+src_daag="images/daag1.png"
 dag_count = 0
 
 e_jump=False
@@ -53,16 +61,18 @@ class coin(Image):
 
     def update(self):
         global coins
-        self.x += 15
+        self.x += 25
 
     def updateb(self):
         global coinsb
-        self.x -= 15
+        self.x -= 25
 
 class Fighter(Image):
     def __init__(self,**kwargs):
         super(Fighter, self).__init__(**kwargs)
         self.helth=500
+        self.left_d=False
+        self.riht_d=False
         self.size = (player_width,player_height)
         self._keyboard = Window.request_keyboard(self._on_keyboard_down, self)
         self._keyboard.bind(on_key_down=self._on_keyboard_down)
@@ -79,31 +89,12 @@ class Fighter(Image):
             jumper = False
 
         elif keycode == (275, 'right'):
-            if(self.x<=w_width-250 ):
-                self.x += 30
-
-            if (cter==0):
-                if(chimg==True):
-                    self.source = h_i_1
-                cter=1
-            else:
-                if(chimg==True):
-                    self.source = h_i_2
-                cter=0
-
+            self.riht_d=True
+            self.left_d=False
 
         elif keycode == (276, 'left'):
-
-            if (self.x >= 10 ):
-                self.x += -30
-                if (cter==0):
-                    if(chimg==True):
-                        self.source = h_i_1
-                    cter=1
-                else:
-                    if(chimg==True):
-                        self.source = h_i_2
-                    cter=0
+            self.riht_d=False
+            self.left_d=True
 
         if keycode == (99, 'c'):
             coins+=1
@@ -113,10 +104,68 @@ class Fighter(Image):
             coinsb+=1
             Sound_handler.kick()
 
+    def up(self,*ignore):
+        global jumper,coins,coinsb,cter,chimg
+        if(self.y == 80 ):
+            jumper = True
+            Sound_handler.jum()
+    def down(self,*ign):
+        global jumper,coins,coinsb,cter,chimg
+        jumper = False
+
+    def right(self,*ign):
+        self.riht_d=True
+        self.left_d=False
+
+    def left(self,*ign):
+        self.left_d=True
+        self.riht_d=False
+
+    def c(self,*ign):
+        global jumper,coins,coinsb,cter,chimg
+        coins+=1
+        Sound_handler.kick()
+#ffffffffffffffffffffff
+    def xf(self,*ign):
+        global jumper,coins,coinsb,cter,chimg
+        coinsb+=1
+        Sound_handler.kick()
+
+
     def update(self,other,da1,da2):
         global jumper,coins,coinsb
+        global cter,chimg
         global eni_hi
         self.eni = other
+
+        if(self.left_d==True):
+            if (self.x >= 10 ):
+                self.x += -7
+                if (cter==0):
+                    if(chimg==True):
+                        self.source = h_i_1
+                    cter=1
+                else:
+                    if(chimg==True):
+                        self.source = h_i_2
+                    cter=0
+            else :
+                self.right()
+
+        if(self.riht_d==True):
+            if(self.x<=w_width-250 ):
+                self.x += 7
+                if (cter==0):
+                    if(chimg==True):
+                        self.source = h_i_1
+                    cter=1
+                else:
+                    if(chimg==True):
+                        self.source = h_i_2
+                    cter=0
+            else:
+                self.left()
+
         if(coins >0):
             da1.x=self.x+100
             da1.y=self.y/2+120
@@ -154,6 +203,7 @@ class Enime(Image):
         super(Enime, self).__init__(**kwargs)
         self.size = (player_width, player_height)
         self.helth = 500
+        self.p=0
 
     def update(self,other,da1,da2,e_dag1,e_dag2):
         global ecount,action_en,e_jump
@@ -161,12 +211,30 @@ class Enime(Image):
         ecount+=1
         c=True
 
-        if(e_dag1.x > self.x - 150 and e_dag1.x < self.x +50 ):
+#        if (ecount == 30 ):
+#            self.p+=1
+#            if(self.p==9):
+#                try:
+#                    eni_hi[-1].x=10000
+#                    del eni_hi[-1]
+#                    self.helth=500
+#                    for i in range (0,int(self.helth/50)):
+#                        p=i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i
+#                        r=w_width-75-p
+#                        em_hi = Image(source='images/health.png',y=w_height-110,x=r,size=(50,50))
+#                        self.add_widget(em_hi)
+#                        eni_hi.append(em_hi)
+#
+#                except:
+#                    pass
+
+
+        if(e_dag1.x > self.x - 240 and e_dag1.x < self.x +140 ):
             if(self.y<81):
                 e_jump=True
                 Sound_handler.jum()
 
-        if(e_dag2.x < self.x + 150 and e_dag2.x > self.x - 70 ):
+        if(e_dag2.x < self.x + 240 and e_dag2.x > self.x - 140 ):
             if(self.y<81):
                 e_jump=True
                 Sound_handler.jum()
@@ -243,13 +311,13 @@ class Enime(Image):
             del pla_hi[-1]
             da1.x=100000
 
-        if ecount == 120 and other.x < self.x:
+        if ecount == 100 and other.x < self.x:
             da2.x=self.x
             Sound_handler.kick()
             da2.y=self.y+50
             ecount=0
 
-        elif ecount == 120 and other.x > self.x:
+        elif ecount == 100 and other.x > self.x:
             da1.x=self.x
             Sound_handler.kick()
             da1.y=self.y+50
@@ -260,12 +328,12 @@ class Enime(Image):
 
 class Sound_handler():
     global mute
-    D = SoundLoader.load('death.wav')
-    W = SoundLoader.load('won.wav')
-    J = SoundLoader.load('jump.ogg')
-    C = SoundLoader.load('kick.ogg')
-    S = SoundLoader.load('str.ogg')
-    #M = SoundLoader.load('main.wav')
+    D = SoundLoader.load('sounds/death.wav')
+    W = SoundLoader.load('sounds/won.wav')
+    J = SoundLoader.load('sounds/jump.ogg')
+    C = SoundLoader.load('sounds/kick.ogg')
+    S = SoundLoader.load('sounds/str.ogg')
+    M = SoundLoader.load('sounds/main.ogg')
     def deth():
         if(mute==False):
             Sound_handler.D.play()
@@ -281,21 +349,21 @@ class Sound_handler():
     def Str():
         if(mute==False):
             Sound_handler.S.play()
-    #def ma():
-    #    if(mute==False):
-    #        Sound_handler.M.play()
-    #def ma_c():
-    #    if(mute==False):
-    #        Sound_handler.M.stop()
+    def ma():
+        if(mute==False):
+            Sound_handler.M.play()
+    def ma_c():
+        if(mute==False):
+            Sound_handler.M.stop()
 
 
 class Games(Widget):
     def __init__(self):
         super(Games, self).__init__()
 
-        global oner,eni_hi,pla_hi
+        global oner,eni_hi,pla_hi,back_src
 
-        self.back = Back_ground(source='dada.png')
+        self.back = Back_ground(source=back_src)
         self.add_widget(self.back)
 
         self.fighter = Fighter(source=h_i_2,y=80)
@@ -334,16 +402,16 @@ class Games(Widget):
 
         for i in range (0,int(self.fighter.helth/50)):
             p=i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i+i
-            pl_hi = Image(source='health.png',y=w_height-110,x=p,size=(50,50))
+            pl_hi = Image(source='images/health.png',y=w_height-110,x=p,size=(50,50))
             self.add_widget(pl_hi)
             pla_hi.append(pl_hi)
 
             r=w_width-75-p
-            em_hi = Image(source='health.png',y=w_height-110,x=r,size=(50,50))
+            em_hi = Image(source='images/health.png',y=w_height-110,x=r,size=(50,50))
             self.add_widget(em_hi)
             eni_hi.append(em_hi)
 
-        Clock.schedule_interval(self.updater,1/65)
+        Clock.schedule_interval(self.updater,1/75)
 
     def exiter(self,*ignore):
         main().stop()
@@ -358,6 +426,7 @@ class Games(Widget):
             self.remove_widget(self.bu)
         except:
             pass
+
         self.opt_starter = Button(text="Back",x=0,y=0)
         self.opt_starter.bind(on_press=self.opt_str)
         self.add_widget(self.opt_starter)
@@ -375,6 +444,14 @@ class Games(Widget):
         self.wep_change=Button(text="Change",font_size=25,background_color=(1,0,1,1),size=(100,50),x=900,y=525)
         self.wep_change.bind(on_press=self.change_wep)
         self.add_widget(self.wep_change)
+#########################
+        self.label_back = Label(text='Background ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=15)
+        self.add_widget(self.label_back)
+
+        self.back_change=Button(text="Change",font_size=45,background_color=(1,0,1,1),size=(175,75),x=880,y=75)
+        self.back_change.bind(on_press=self.change_back)
+        self.add_widget(self.back_change)
+###########################
 
         self.muter=Button(text='Muter',x=w_width-100,y=w_height-50,size=(100,50))
         self.muter.bind(on_press=self.mut)
@@ -383,19 +460,19 @@ class Games(Widget):
         self.label_ene = Label(text='Enemy ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=300)
         self.add_widget(self.label_ene)
 
-        self.enimi=Image(source=eni_1,x=800,y=300)
+        self.enimi=Image(source=eni_1,x=800,y=350)
         self.add_widget(self.enimi)
 
-        self.eni_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=325)
+        self.eni_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=375)
         self.eni_chang.bind(on_press=self.kaka)
         self.add_widget(self.eni_chang)
 
         self.label_py = Label(text='You ',color=(0,0,0,1),size=(400,200),font_size=100,x=300,y=150)
         self.add_widget(self.label_py)
-        self.pymi=Image(source=h_i_1,x=800,y=150)
+        self.pymi=Image(source=h_i_1,x=800,y=210)
         self.add_widget(self.pymi)
 
-        self.py_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=175)
+        self.py_chang=Button(text="Change",font_size=25,background_color=(1,0,0,1),size=(100,50),x=900,y=230)
         self.py_chang.bind(on_press=self.py_i_chang)
         self.add_widget(self.py_chang)
         try:
@@ -403,65 +480,174 @@ class Games(Widget):
         except:
             pass
 
+    def change_back(self,*ignore):
+        global back_src, back_count
+
+        if(back_count==0):
+            back_src='images/dada.png'
+            self.back.source=back_src
+            back_count=1
+
+        elif(back_count==1):
+            back_src='images/dada1.png'
+            self.back.source=back_src
+            back_count=2
+
+        elif(back_count==2):
+            back_src='images/dada2.png'
+            self.back.source=back_src
+            back_count=3
+
+        elif(back_count==3):
+            back_src='images/dada3.png'
+            self.back.source=back_src
+            back_count=0
+
+
     def py_i_chang(self,*ignore):
         global h_i_1,h_i_2 ,py_count
 
         if(py_count==0):
-            h_i_1='sask.png'
-            h_i_2='sask2.png'
+            h_i_1='images/sask.png'
+            h_i_2='images/sask2.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=1
 
         elif(py_count==1):
-            h_i_1='rabo.png'
-            h_i_2='rabo2.png'
+            h_i_1='images/rabo.png'
+            h_i_2='images/rabo2.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=2
 
         elif(py_count==2):
-            h_i_1='en_1.png'
-            h_i_2='en_2.png'
+            h_i_1='images/en_1.png'
+            h_i_2='images/en_2.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=3
 
         elif(py_count==3):
-            h_i_1='aaa.png'
-            h_i_2='yayao.png'
+            h_i_1='images/gost_5.png'
+            h_i_2='images/gost_5.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=4
+
+        elif(py_count==4):
+            h_i_1='images/gost_2.png'
+            h_i_2='images/gost_2.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=5
+
+        elif(py_count==5):
+            h_i_1='images/gost_1.png'
+            h_i_2='images/gost_1.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=6
+
+        elif(py_count==6):
+            h_i_1='images/hero_1.png'
+            h_i_2='images/hero_1.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=7
+
+        elif(py_count==7):
+            h_i_1='images/def_1.png'
+            h_i_2='images/def_1.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=8
+
+        elif(py_count==8):
+            h_i_1='images/someone_1.png'
+            h_i_2='images/someone_1.png'
+            self.fighter.source=h_i_1
+            self.pymi.source=h_i_1
+            py_count=9
+
+
+        elif(py_count==9):
+            h_i_1='images/aaa.png'
+            h_i_2='images/yayao.png'
             self.fighter.source=h_i_1
             self.pymi.source=h_i_1
             py_count=0
-
 
     def kaka(self,*ignore):
         global eni_1,eni_2 ,eni_count
 
         if(eni_count==0):
-            eni_1="rabo.png"
-            eni_2="rabo2.png"
+            eni_1="images/rabo.png"
+            eni_2="images/rabo2.png"
             self.enime.source=eni_1
             self.enimi.source=eni_1
             eni_count=1
 
         elif(eni_count==1):
-            eni_1='aaa.png'
-            eni_2='yayao.png'
+            eni_1='images/aaa.png'
+            eni_2='images/yayao.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=2
 
         elif(eni_count==2):
-            eni_1='sask.png'
-            eni_2='sask2.png'
+            eni_1='images/sask.png'
+            eni_2='images/sask2.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=3
 
+
         elif(eni_count==3):
-            eni_1='en_1.png'
-            eni_2='en_2.png'
+            eni_1='images/gost_5.png'
+            eni_2='images/gost_5.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=4
+
+        elif(eni_count==4):
+            eni_1='images/gost_2.png'
+            eni_2='images/gost_2.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=5
+
+        elif(eni_count==5):
+            eni_1='images/gost_1.png'
+            eni_2='images/gost_1.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=6
+
+        elif(eni_count==6):
+            eni_1='images/hero_1.png'
+            eni_2='images/hero_1.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=7
+
+        elif(eni_count==7):
+            eni_1='images/def_1.png'
+            eni_2='images/def_1.png'
+            self.enimi.source=eni_1
+            self.enime.source=eni_1
+            eni_count=8
+
+        elif(eni_count==8):
+            eni_1='images/someone_1.png'
+            eni_2='images/someone_1.png'
+            self.enime.source=eni_1
+            self.enimi.source=eni_1
+            eni_count=9
+
+        elif(eni_count==9):
+            eni_1='images/en_1.png'
+            eni_2='images/en_2.png'
             self.enimi.source=eni_1
             self.enime.source=eni_1
             eni_count=0
@@ -471,7 +657,7 @@ class Games(Widget):
 
 
         if(dag_count==0):
-            src_daag='daag2.png'
+            src_daag='images/daag2.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -480,7 +666,7 @@ class Games(Widget):
             dag_count=1
 
         elif(dag_count==1):
-            src_daag='daag3.png'
+            src_daag='images/daag3.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -489,7 +675,7 @@ class Games(Widget):
             dag_count=2
 
         elif(dag_count==2):
-            src_daag='daag.png'
+            src_daag='images/daag.png'
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -498,7 +684,7 @@ class Games(Widget):
             dag_count=3
 
         elif(dag_count==3):
-            src_daag="daag1.png"
+            src_daag="images/daag1.png"
             self.wep_image.source=src_daag
             self.coind.source=src_daag
             self.coindb2.source=src_daag
@@ -530,6 +716,8 @@ class Games(Widget):
             pass
         self.remove_widget(self.label_wep)
         self.remove_widget(self.label_ene)
+        self.remove_widget(self.back_change)
+        self.remove_widget(self.label_back)
 
         self.remove_widget(self.wep_image)
         self.remove_widget(self.wep_change)
@@ -565,6 +753,9 @@ class Games(Widget):
             self.remove_widget(self.opt_starter_sta)
             self.remove_widget(self.label_wep)
             self.remove_widget(self.label_ene)
+            self.remove_widget(self.back_change)
+            self.remove_widget(self.label_back)
+
             self.remove_widget(self.wep_image)
             self.remove_widget(self.wep_change)
             self.remove_widget(self.enimi)
@@ -603,24 +794,26 @@ class Games(Widget):
             self.update()
 
     def update(self,*ignore):
-        global oner,chimg
+        global oner,chimg,ft
         side_no=0
         if (self.fighter.x-50 < self.enime.x):
             side_no = 0
         elif(self.fighter.x>self.enime.x):
             side_no = 1
+        if (ft==0):
+            Sound_handler.ma()
+            ft=1
 
-        #Sound_handler.ma()
         self.fighter.update(self.enime,self.coind,self.coindb)
         self.enime.update(self.fighter,self.coind2,self.coindb2,self.coind,self.coindb)
 
 
         if (self.fighter.helth==0):
             oner = False
-            self.enime.source = 'en_ya.png'
+            self.enime.source = 'images/en_ya.png'
             self.lala =Label(text='[color=#000000]YOU LOSS',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
-            #Sound_handler.ma_c()
+            Sound_handler.ma_c()
             self.add_widget(self.options)
             self.add_widget(self.exit_button)
             Sound_handler.deth()
@@ -631,15 +824,18 @@ class Games(Widget):
             self.add_widget(self.ex_b)
             self.ex_b.bind(on_press=self.exiter)
 
+
         if(self.enime.helth==0):
             global chimg
             oner = False
-            self.fighter.source='yawin.png'
+            self.fighter.source='images/yawin.png'
             chimg=False
             self.lala=Label(text='[color=#000000]YOU WONE',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
             self.add_widget(self.options)
-            #Sound_handler.ma_c()
+
+
+            Sound_handler.ma_c()
             Sound_handler.win()
 
             self.bu=Button(text="Restart",x=w_width/2-400,background_color=(0,1,0,1),y=w_height/2-30,size=(400,100),font_size=100)
@@ -675,10 +871,11 @@ class Games(Widget):
                     self.enime.x -= 20
 
     def restart(self,*ignore):
-        global jumper,e_jump
+        global jumper,e_jump,ft
         global chimg,oner,pla_hi,eni_hi
         self.fighter.source=h_i_1
         self.enime.source=eni_1
+        ft=0
         chimg = True
         oner = True
         jumper=False

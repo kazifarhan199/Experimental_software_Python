@@ -1,0 +1,1 @@
+pyinstaller --onedir --name=Fight --windowed --icon=dada.ico "main.py"
