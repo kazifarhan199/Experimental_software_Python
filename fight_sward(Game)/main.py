@@ -15,6 +15,7 @@ import random
 ##########
 mute = False
 oner = False
+##########
 ft=0
 #########
 eni_1 = 'images/en_1.png'
