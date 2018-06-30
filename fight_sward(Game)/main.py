@@ -812,7 +812,7 @@ class Games(Widget):
         if (self.fighter.helth==0):
             oner = False
             self.enime.source = 'images/en_ya.png'
-            self.lala =Label(text='[color=#000000]YOU LOSS',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
+            self.lala =Label(text='[color=#000000]YOU LOST',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
             Sound_handler.ma_c()
             self.add_widget(self.options)
@@ -831,7 +831,7 @@ class Games(Widget):
             oner = False
             self.fighter.source='images/yawin.png'
             chimg=False
-            self.lala=Label(text='[color=#000000]YOU WONE',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
+            self.lala=Label(text='[color=#000000]YOU WON',x=w_width/2,y=w_height/2+100,markup=True,font_size=200)
             self.add_widget(self.lala)
             self.add_widget(self.options)
 
