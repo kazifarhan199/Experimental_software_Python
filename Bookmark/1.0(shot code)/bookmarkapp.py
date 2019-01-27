@@ -5,7 +5,7 @@ import webbrowser
 
 def open_link(text_provided):
 	chrome_path="C:\\Program Files (x86)\\Google\Chrome\\Application\\chrome.exe"
-	webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path),0)
+	webbrowser.register('chrome', None,webbrowser.BackgroundBrowser(chrome_path))
 
 	main_lib={
 	'cleaverprogrammer':'http://cleverprogrammer.teachable.com'
